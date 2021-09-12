@@ -38,12 +38,13 @@ function mainMenu(){
     switch(answer.options){
       case "Veiw all employees":
         new async function(){
-          await console.table(getTable(employees));
+          let rows = await getTable(employees);
+          console.table(rows);
           mainMenu();
         }
         break;
       case "Veiw departments":
-        console.table(getTable(departments));
+        getTable(departments);
         mainMenu();
         break;
       case "Veiw roles":
