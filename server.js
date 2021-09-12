@@ -1,19 +1,20 @@
 
 const db = require("./db/connection");
 let inquirer = require("inquirer");
+const getTable = require("./utils/get_tables")
 let departmentChoice = [];
 let managerChoices = [];
 let roleChoices = [];
 const employees = `SELECT employees.id, employees.first_name, employees.last_name, employees.manager_id AS manager,
-                   roles.title AS role, roles.salary AS salary, departments.name AS department
-                   FROM employees
-                   LEFT JOIN roles ON employees.role_id = roles.id
-                   LEFT JOIN departments ON roles.department_id = departments.id`
+                    roles.title AS role, roles.salary AS salary, departments.name AS department
+                    FROM employees
+                    LEFT JOIN roles ON employees.role_id = roles.id
+                    LEFT JOIN departments ON roles.department_id = departments.id`
 const departments = 'SELECT * FROM departments';
 const roles = `SELECT roles.*,
-               departments.name AS department_assigned
-               FROM roles
-               LEFT JOIN departments ON roles.department_id = departments.id`;
+                departments.name AS department_assigned
+                FROM roles
+                LEFT JOIN departments ON roles.department_id = departments.id`;
 
 
 function mainMenu(){
@@ -36,13 +37,18 @@ function mainMenu(){
   .then( answer=>{
     switch(answer.options){
       case "Veiw all employees":
-        getTable(employees);
+        new async function(){
+          await console.table(getTable(employees));
+          mainMenu();
+        }
         break;
       case "Veiw departments":
-        getTable(departments);
+        console.table(getTable(departments));
+        mainMenu();
         break;
       case "Veiw roles":
         getTable(roles)
+        mainMenu();
         break;
       case "Add Employee":
         break;
@@ -58,13 +64,7 @@ function mainMenu(){
   });
 };
 
-function getTable(sqlArgs){
-  db.query(sqlArgs, (err, Table, feilds)=>{
-    console.log("\n\n")
-    console.table(Table);
-    mainMenu();
-  });
-};
+
 
 function getDepts(){
   db.query("SELECT * FROM departments",(err, data)=>{
@@ -124,4 +124,3 @@ function createDepartment(){
 
 mainMenu();
 
-module.exports = mainMenu;
