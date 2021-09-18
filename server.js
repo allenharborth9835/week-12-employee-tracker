@@ -2,12 +2,14 @@ const db = require("./db/connection");
 let inquirer = require("inquirer");
 const {getTable, createDepartment, createRole, createEmployee, changeEmployeeRole} = require("./utils/routes")
 
+
+//sql statements to create the table for the different views 
 const employees = `SELECT employees.id, employees.first_name, employees.last_name, roles.title AS role, roles.salary AS salary,
                     departments.name AS department, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name
                     FROM employees
                     LEFT JOIN roles ON employees.role_id = roles.id
                     LEFT JOIN departments ON roles.department_id = departments.id
-                    LEFT JOIN employees manager ON manager.id = employees.manager_id`
+                    LEFT JOIN employees manager ON manager.id = employees.manager_id`;
 
 const departments = 'SELECT * FROM departments';
 
@@ -16,6 +18,7 @@ const roles = `SELECT roles.*,
                 FROM roles
                 LEFT JOIN departments ON roles.department_id = departments.id`;
 
+//the main menu function that will give the user the options to choose from
 function mainMenu(){
   inquirer
     .prompt({
@@ -62,4 +65,3 @@ function mainMenu(){
 };
 
 mainMenu();
-

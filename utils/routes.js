@@ -1,10 +1,13 @@
 const db = require("../db/connection");
 let inquirer = require("inquirer");
 
+//array to store options for 
+//departments, employees, and roles
 let departmentChoice = [];
 let employeeChoice = [];
 let roleChoice = [];
 
+//a function to return a table after taking in an sql statment
 function getTable(sqlArgs){
   return new Promise((Resolve, Reject)=>{
     db.query(sqlArgs, (err, Table, feilds)=>{
@@ -13,6 +16,7 @@ function getTable(sqlArgs){
   })
 };
 
+//a function to create a new department
 function createDepartment(){
   return new Promise((res, rej)=>{
     inquirer.prompt({
@@ -26,6 +30,7 @@ function createDepartment(){
   })
 }
 
+//a function that collects all the current deptarments as options to choose
 function getDepts(){
   db.query("SELECT * FROM departments",(err, data)=>{
     if(err)throw err;
@@ -35,6 +40,7 @@ function getDepts(){
   })
 }
 
+//a function that collects all the current roles as options to choose
 function getRoles(){
   db.query("SELECT * FROM roles",(err, data)=>{
     if(err)throw err;
@@ -44,6 +50,7 @@ function getRoles(){
   })
 }
 
+//a function that collects all the current emplyees as options to choose
 function getEmployees(){
   db.query("SELECT * FROM employees",(err, data)=>{
     if(err)throw err;
@@ -53,6 +60,7 @@ function getEmployees(){
   })
 }
 
+//a function to create a new role
 function createRole(){
   return new Promise((res,req)=>{
     getDepts()
@@ -91,6 +99,7 @@ function createRole(){
   });
 };
 
+//a function to create a new employee
 function createEmployee(){
   return new Promise((res, req)=>{
     getRoles();
@@ -132,6 +141,7 @@ function createEmployee(){
   })
 }
 
+//a function to change employees role
 function changeEmployeeRole(){
   return new Promise((res, req)=>{
     getEmployees();
@@ -147,13 +157,15 @@ function changeEmployeeRole(){
         type: "list",
         name: "employee",
         message:"choose the Employee you wish to change",
-        choices: employeeChoice
+        choices: employeeChoice,
+        when: (answer)=>answer.confirm
       },
       {
         type: "list",
         name: "role",
         message: "what is the employee's new role?",
-        choices: roleChoice
+        choices: roleChoice,
+        when: (answer)=>answer.confirm
       }
     ]).then(answer=>{
       if(answer.confirm){
@@ -166,6 +178,7 @@ function changeEmployeeRole(){
                     res(console.log(`changed ${getEmployee[1]}'s to ${getRole[1]}`))
                 })
       }else{
+        res()
       }
     })
   })
