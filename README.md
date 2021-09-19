@@ -17,6 +17,9 @@ After node is installed simply type “npm Install” to install all of the nece
 
 ## Usage
 
+### video_walkthrough
+https://drive.google.com/file/d/1DTeGsO_y7NWfNYpZIToqdeXu9C1wSXPh/preview
+
 This is an employee tracker to start it simply type npm start. After that you will be given a menu to choose from. The first 3 options return the tables of employees, departments, and roles. The next three functions let you create an element for the tables. The last function lets you update the role of an employee.
 
 ## License
